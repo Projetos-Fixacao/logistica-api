@@ -1,30 +1,75 @@
 package com.ads.logistica.api.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ads.logistica.api.model.Cliente;
+import com.ads.logistica.api.repository.ClienteRepository;
+import com.ads.logistica.api.service.CatalogoClienteService;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @RestController
+@RequestMapping("/clientes")
 public class ClienteController {
+	
 
-	@GetMapping("/clientes")
+	private ClienteRepository clienteRepository; 
+	
+	private CatalogoClienteService catalogoClienteService;
+	
+	@GetMapping
 	public List<Cliente> listar() {
-		Cliente cliente1 = new Cliente();
-		cliente1.setId(1L);
-		cliente1.setNome("Alana");
-		cliente1.setTelefone("9999999999");
-		cliente1.setEmail("alana@com");
+		return clienteRepository.findAll();	
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Cliente> buscar(@PathVariable Long id) {
+		return clienteRepository.findById(id)
+				.map(ResponseEntity::ok)
+				.orElse(ResponseEntity.notFound().build());
+	}
+	
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
+		return catalogoClienteService.salvar(cliente);
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Cliente> atualizar(@PathVariable Long id, @Valid @RequestBody Cliente cliente) {
 		
-		var cliente2 = new Cliente();
-		cliente2.setId(2L);
-		cliente2.setNome("Rafaela");
-		cliente2.setTelefone("9999999999");
-		cliente2.setEmail("rafaela@com");
+		if(!clienteRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
 		
-		return Arrays.asList(cliente1,cliente2);
+		cliente.setId(id);
+		cliente = catalogoClienteService.salvar(cliente);
+		return ResponseEntity.ok(cliente);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> remover(@PathVariable Long id) {
+		
+		if(!clienteRepository.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		catalogoClienteService.excluir(id);
+		return ResponseEntity.noContent().build();
 	}
 }
