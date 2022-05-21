@@ -1,4 +1,4 @@
-package com.ads.logistica.api.exception;
+package com.ads.logistica.api.domain.exception;
 
 public class NegocioException extends RuntimeException{
 

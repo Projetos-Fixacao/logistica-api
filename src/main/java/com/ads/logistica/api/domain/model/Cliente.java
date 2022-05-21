@@ -1,4 +1,4 @@
-package com.ads.logistica.api.model;
+package com.ads.logistica.api.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

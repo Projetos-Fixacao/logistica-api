@@ -1,4 +1,4 @@
-package com.ads.logistica.api.exceptionhandler;
+package com.ads.logistica.api.api.exceptionhandler;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,8 +20,8 @@ public class Problema {
 	private String titulo;
 	private List<Campo> campos;
 	
-	@Getter
 	@AllArgsConstructor
+	@Getter
 	static class Campo{
 		
 		private String nome;
