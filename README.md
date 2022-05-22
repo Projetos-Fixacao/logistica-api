@@ -28,3 +28,5 @@ Implementação de uma  REST API usando projetos do ecossistema Spring.
 * Implementando sub-recursos
 * Implementando ação não-CRUD
 
+#### Documentado com <a href="http://localhost:8080/swagger-ui/index.html#/">UI Swagger</a>
+
